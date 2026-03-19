@@ -78,9 +78,6 @@ void get(char key[]) {
 
             curr = curr -> next;
         }
-
-        
-
     }
 }
 
