@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 struct KeyValuePair {
     char key[100];
@@ -8,9 +9,7 @@ struct KeyValuePair {
 };
 
 int capacity = 100;
-struct KeyValuePair bucket[100]; 
-
-
+struct KeyValuePair bucket[100] = {0}; 
 
 
 int hash(char string[]) {
@@ -40,11 +39,25 @@ void insert(char key[], char value[]) {
     } else {
         printf("%s \n", "something");
 
+        struct KeyValuePair *curr = bucket[index].next; 
 
+        while (curr -> next != NULL) {
+            curr = curr -> next;
+        }
+
+        struct KeyValuePair *newNode = malloc(sizeof(struct KeyValuePair)); 
+
+        // Copy strings safely
+        strncpy(newNode -> key, key, 99);
+        newNode -> key[99] = '\0';  // ensure null terminator
+        
+        strncpy(newNode -> value, value, 99);
+        newNode -> value[99] = '\0';  // ensure null terminator
+        
+        newNode -> next = NULL;
+
+        curr -> next = newNode;
     }
-
-    printf("%s", bucket[2].key);
-
 
 }
 
@@ -55,12 +68,25 @@ void get(char key[]) {
     if (bucket[index].key[0] == '\0') {
         printf("%s \n", "nothing found");
     } else {
-        printf("%s \n", bucket[index].value);
+        struct KeyValuePair *curr = &bucket[index];
+
+        while (curr != NULL) {
+            if (strcmp(curr -> key, key) == 0) {
+                printf("%s \n", curr -> value);
+                return;
+            }
+
+            curr = curr -> next;
+        }
+
+        
+
     }
 }
 
 
 int main() {
+
     insert("215", "Bikraman Karmakar");
     get("215");
     return 0;
