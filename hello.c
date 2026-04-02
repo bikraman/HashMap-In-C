@@ -20,6 +20,24 @@ int hash(char string[]) {
     return hash % capacity;
 }
 
+int check_capacity() {
+
+    int filled = 0;
+
+    for (int i = 0 ; i < sizeof(bucket) / sizeof(bucket[0]); i++ ) {
+
+        if (bucket[i].key[0] != '\0') {
+            filled++;
+        }
+
+    }
+
+    printf("filled: %d \n", filled);
+
+    return filled;
+
+}
+
 void insert(char key[], char value[]) {
     printf("key=%s value=%s\n", key, value);
 
@@ -79,6 +97,8 @@ void get(char key[]) {
             curr = curr -> next;
         }
     }
+
+    
 }
 
 
@@ -86,6 +106,8 @@ int main() {
 
     insert("215", "Bikraman Karmakar");
     get("215");
+
+    check_capacity();
     return 0;
 }
 
