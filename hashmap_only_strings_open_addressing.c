@@ -57,7 +57,7 @@ void insert(char key[], char value[]) {
     } else {
         printf("%s \n", "something");
 
-        struct KeyValuePair *curr = bucket[index].next; 
+        struct KeyValuePair *curr = &bucket[index]; 
 
         while (curr -> next != NULL) {
             curr = curr -> next;
@@ -101,13 +101,66 @@ void get(char key[]) {
     
 }
 
+int delete(char key[]) {
+
+    int index = hash(key);
+
+    if (bucket[index].key[0] == '\0') {
+        printf("%s \n", "key no found");
+        return -1;
+    } else {
+        struct KeyValuePair *curr = &bucket[index];
+        struct KeyValuePair *prev = curr;
+
+        int counter = 0;
+
+        while (curr != NULL) {
+            if (strcmp(curr -> key, key) == 0) {
+                printf("%s \n", "found key");
+
+                if (counter == 0) {
+
+                    if (curr -> next != NULL) {
+                        bucket[index] = *(curr -> next);
+                    } else {
+                        // Copy strings safely
+                        strncpy(bucket[index].key, "", 99);
+                        bucket[index].key[99] = '\0';  // ensure null terminator
+                        
+                        strncpy(bucket[index].value, "", 99);
+                        bucket[index].value[99] = '\0';  // ensure null terminator
+                        
+                        bucket[index].next = NULL ;
+                    }
+                    free(curr)
+                } else {
+                    prev -> next = curr -> next;
+                    free(curr) 
+                }
+                return 1;
+            }
+
+            prev = curr;
+            curr = curr -> next;
+            counter++;
+
+        }
+    }
+
+    return -1;
+
+}
+
 
 int main() {
 
     insert("215", "Bikraman Karmakar");
     get("215");
-
     check_capacity();
+
+    delete("215");
+    check_capacity();
+
     return 0;
 }
 
